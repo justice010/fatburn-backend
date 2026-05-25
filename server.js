@@ -17,7 +17,7 @@ app.post('/api/generate', async (req, res) => {
     const prompt = buildPrompt(data);
 
     const payload = JSON.stringify({
-        model: 'deepseek-chat',
+        model: 'deepseek-v4-flash',
         messages: [
             {
                 role: 'system',
@@ -28,7 +28,7 @@ app.post('/api/generate', async (req, res) => {
                 content: prompt
             }
         ],
-        max_tokens: 3000,
+        max_tokens: 6000,
         temperature: 0.7
     });
 
@@ -48,6 +48,7 @@ app.post('/api/generate', async (req, res) => {
         apiRes.on('data', chunk => body += chunk);
         apiRes.on('end', () => {
             try {
+		console.log('DeepSeek原始返回:', body);
                 const result = JSON.parse(body);
                 const content = result.choices[0].message.content;
                 res.json({ success: true, report: content });
